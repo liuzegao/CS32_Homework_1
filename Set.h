@@ -11,7 +11,7 @@
 #include <iostream>
 #include <String>
 
-typedef unsigned long ItemType;
+typedef std::string ItemType;
 
 class Set
 {
