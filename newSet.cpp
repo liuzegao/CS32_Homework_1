@@ -43,8 +43,8 @@ Set::Set()
     
 Set::~Set()
 {
-    delete m_Set;
-    delete m_Setcheck;
+    delete [] m_Set;
+    delete [] m_Setcheck;
 }
  
 
@@ -187,7 +187,8 @@ void Set::swap(Set& other)
     ItemType* temp_m_Set = nullptr;
     temp_m_Set = other.m_Set;
     
-    bool* temp_m_Setcheck = other.m_Setcheck;
+    bool* temp_m_Setcheck = nullptr;
+    temp_m_Setcheck = other.m_Setcheck;
     int temp_m_Setsize = other.m_Setsize;
     
     other.m_Set = m_Set;
@@ -200,8 +201,8 @@ void Set::swap(Set& other)
     m_Setcheck = temp_m_Setcheck;
     m_Setsize = temp_m_Setsize;
     
-    
-    
+    temp_m_Set = nullptr;
+    temp_m_Setcheck = nullptr;
     
     
     /*
