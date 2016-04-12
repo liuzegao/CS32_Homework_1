@@ -1,3 +1,4 @@
+
 //
 //  main.cpp
 //  CS32_Homework_1_5
@@ -16,23 +17,23 @@ int main(int argc, const char * argv[])
     Set a(1000);   // a can hold at most 1000 distinct items
     Set b(5);      // b can hold at most 5 distinct items
     Set c;         // c can hold at most DEFAULT_MAX_ITEMS distinct items
-    ItemType v[6] = { "aa", "bb", "cc", "dd", "ee", "gg"};
+    ItemType v[6] = {123, 456, 789, 1134,5322,5423};
     
     // No failures inserting 5 distinct items into b
     for (int k = 0; k < 5; k++)
         assert(b.insert(v[k]));
     
+    //b.Print(1);
+   
     // Failure if we try to insert a sixth distinct item into b
     assert(!b.insert(v[5]));
     
     // When two Sets' contents are swapped, their capacities are swapped
-    // as well:
+    //as well:
     a.swap(b);
     
-    //不通过 swap有问题
-    assert(!a.insert(v[5]));
-           assert(b.insert(v[5]));
-           
-           return 0;
+    //a.Print(3);
+    //b.Print(10);
+    assert(!a.insert(v[5])  &&  b.insert(v[5]));
     
 }

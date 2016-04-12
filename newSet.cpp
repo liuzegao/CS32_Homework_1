@@ -18,9 +18,10 @@ Set::Set(int size)
 {
     m_Setsize = size;
     m_Set = new ItemType[m_Setsize];
+    m_Setcheck = new bool[m_Setsize];
     //Initialize the set with "" and make all the entries invalid
-    for(int i=0; i < m_DEFAULT_MAX_ITEMS; i++)
-    { //m_Set[i] = "";
+    for(int i=0; i < m_Setsize; i++)
+    { 
         m_Setcheck[i] = false;
     }
     
@@ -30,20 +31,23 @@ Set::Set()
 {
     m_Setsize = m_DEFAULT_MAX_ITEMS;
     m_Set = new ItemType[m_Setsize];
+    m_Setcheck = new bool[m_Setsize];
     //Initialize the set with "" and make all the entries invalid
-    for(int i=0; i < m_DEFAULT_MAX_ITEMS; i++)
-    { //m_Set[i] = "";
+    for(int i=0; i < m_Setsize; i++)
+    {
         m_Setcheck[i] = false;
     }
 }
 
-/*
- 
+
+    
 Set::~Set()
 {
     delete m_Set;
+    delete m_Setcheck;
 }
-*/
+ 
+
 
 
 // Return true if the set is empty, otherwise false.
@@ -51,10 +55,10 @@ Set::~Set()
 bool Set::empty() const
 {
     
-    for(int i=0; i < m_DEFAULT_MAX_ITEMS; i++)
+    for(int i=0; i < m_Setsize; i++)
         if( m_Setcheck[i] == true)
         {
-            cerr << "Set is not empty" <<endl;
+            cerr << "Error: Set is not empty" <<endl;
             return false;
         }
     return true;
@@ -69,7 +73,7 @@ int Set::size() const
     int size=0;
     
     //Go through the set and find the number of slot that is not empty and record them into size;
-    for(int i=0; i < m_DEFAULT_MAX_ITEMS; i++)
+    for(int i=0; i < m_Setsize; i++)
         if( m_Setcheck[i] == true)
             size++;
     
@@ -86,24 +90,24 @@ int Set::size() const
 bool Set::insert(const ItemType& value)
 {
     //Check if the set is full, if full cerr "Set is full"
-    if(this->size() >= m_Setsize)
-    {   cerr << "Set is full" << endl;
+    if(size() >= m_Setsize)
+    {   cerr << "Error: Set is full" << endl;
         return false;
     }
     
     //Check if value is alreay presented
-    for(int i=0; i < this->size(); i++)
+    for(int i=0; i < m_Setsize; i++)
         //Check if this position i is valid etnry
         if( m_Setcheck[i] == true)
             //Check if the value of this entry is the same as value
             if(m_Set[i] == value)
             {
-                cerr << "Input value is already presented" << endl;
+                cerr << "Error: Input value is already presented" << endl;
                 return false;
             }
     
     //Find the closet empty slot from Set[0] the start point and insert the value in it. m_Setsize + 1
-    for(int i=0; i < m_DEFAULT_MAX_ITEMS; i++)
+    for(int i=0; i < m_Setsize; i++)
         if( m_Setcheck[i] == false)
         {
             //Set m_Set[i] with value
@@ -125,7 +129,7 @@ bool Set::insert(const ItemType& value)
 bool Set::erase(const ItemType& value)
 {
     //Check if value is presented if so then erase it.
-    for(int i=0; i < m_DEFAULT_MAX_ITEMS; i++)
+    for(int i=0; i < m_Setsize; i++)
         //Check if this entry is valid;
         if(m_Setcheck[i] == true)
             //Check if this valid entry has value
@@ -146,7 +150,7 @@ bool Set::erase(const ItemType& value)
 bool Set::contains(const ItemType& value) const
 {
     //Go through the set and see if the value is in the set.
-    for(int i=0; i < m_DEFAULT_MAX_ITEMS; i++)
+    for(int i=0; i < m_Setsize; i++)
         if(m_Setcheck[i] == true)
             if( m_Set[i] == value)
             {
@@ -168,8 +172,9 @@ bool Set::get(int i, ItemType& value) const
         return false;
     
     //If i is within the range, copy into value into position i and return true
-    for(int k=0; k < m_DEFAULT_MAX_ITEMS; k++)
+    for(int k=0; k < m_Setsize; k++)
         if(m_Setcheck[k] == true)
+            if(k == i)
             value = m_Set[k];
     return true;
 }
@@ -179,60 +184,88 @@ bool Set::get(int i, ItemType& value) const
 void Set::swap(Set& other)
 {
     //Creat a temp Set that copys the other Set
-    Set temp(other);
+    ItemType* temp_m_Set = nullptr;
+    temp_m_Set = other.m_Set;
     
-    //Clean other.m_Set[] with ""
-    //for(int i=0; i< m_DEFAULT_MAX_ITEMS; i++)
-    //other.m_Set[i] = "";
+    bool* temp_m_Setcheck = other.m_Setcheck;
+    int temp_m_Setsize = other.m_Setsize;
     
-    //Make the other.m_Setsize = m_Setsize
-    //other.m_Setsize = m_Setsize;
+    other.m_Set = m_Set;
+    other.m_Setcheck = m_Setcheck;
+    other.m_Setsize = m_Setsize;
+    
+    
+    
+    m_Set = temp_m_Set;
+    m_Setcheck = temp_m_Setcheck;
+    m_Setsize = temp_m_Setsize;
+    
+    
+    
+    
+    
+    /*
+     //Copy m_Set[] into other.m_Set[]
+    for(int i=0; i< other.m_Setsize; i++)
+    {
+        temp.m_Set[i] = other.m_Set[i];
+        temp.m_Setcheck[i] =other.m_Setcheck[i];
+        
+    }
+
+
+    
+               //Clean other.m_Set[] with ""
+               //for(int i=0; i< m_DEFAULT_MAX_ITEMS; i++)
+               //other.m_Set[i] = "";
+    
+               //Make the other.m_Setsize = m_Setsize
+               //other.m_Setsize = m_Setsize;
+    
+    
+    other.m_Setsize = m_Setsize;
     
     //Copy m_Set[] into other.m_Set[]
-    for(int i=0; i< m_DEFAULT_MAX_ITEMS; i++)
+    for(int i=0; i< m_Setsize; i++)
     {
-        other.m_Set[i] = this->m_Set[i];
-        other.m_Setcheck[i] = this->m_Setcheck[i];
-        other.m_Setsize = this -> m_Setsize;
+        other.m_Set[i] = m_Set[i];
+        other.m_Setcheck[i] =m_Setcheck[i];
+      
     }
     
     
-    //////////////////////////////////////////////////
+              //Clean m_Set[] with ""
+              //for(int i=0; i< m_DEFAULT_MAX_ITEMS; i++)
+              // m_Set[i] = "";
     
-    //Clean m_Set[] with ""
-    //for(int i=0; i< m_DEFAULT_MAX_ITEMS; i++)
-    // m_Set[i] = "";
     
+     m_Setsize = temp.m_Setsize;
     //Copy temp.m_Set[] into m_Set[]
-    for(int i=0; i< m_DEFAULT_MAX_ITEMS; i++)
+    for(int i=0; i< temp.m_Setsize; i++)
     {
-        this -> m_Set[i] = temp.m_Set[i];
-        this -> m_Setcheck[i] = temp.m_Setcheck[i];
-        this -> m_Setsize = temp.m_Setsize;
+        m_Set[i] = temp.m_Set[i];
+        m_Setcheck[i] = temp.m_Setcheck[i];
 
     }
     
     //Make the m_Setsize = temp_Setsize
+     */
     
 }
 
 
-//Exam before turn in: Delete the test impelmentation
-/////////////////////////////////////////////////
-// Test Implementation
-/////////////////////////////////////////////////
+//Exam before turn in : Delete
 
 void Set::Print(int i)
 {
     cout <<m_Set[i]<<endl;
 }
 
-void Set::put(int i, ItemType& value)
+void Set::put(int i, unsigned long& value)
 {
     m_Set[i] = value;
     
 }
 
-/////////////////////////////////////////////////
-// Test Implementation
-/////////////////////////////////////////////////
+
+

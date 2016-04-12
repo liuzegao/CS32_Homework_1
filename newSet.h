@@ -11,7 +11,7 @@
 #include <iostream>
 #include <String>
 
-typedef std::string ItemType;
+typedef unsigned long ItemType;
 
 class Set
 {
@@ -23,7 +23,7 @@ public:
     Set(); //Creat a empty set
     
     //Exam before turn in:Shall I build a costum destructor?
-    //~Set();
+    ~Set();
     
     
     bool empty() const;  // Return true if the set is empty, otherwise false.
@@ -54,12 +54,16 @@ public:
     // Exchange the contents of this set with the other one.
     
     
+    //Exam before turn in : Delete
     //Test data member
     
     //Print out the m_Set[i]
     void Print(int i);
     //Input value in m_Set[i]
-    void put(int i, ItemType& value);
+    void put(int i, unsigned long& value);
+    
+
+    
     
     
 private:
@@ -68,11 +72,12 @@ private:
     const int m_DEFAULT_MAX_ITEMS = 100;
     
     //m_Setcheck checks if a specific entry in the array is valid
-    bool m_Setcheck[100];
+    bool* m_Setcheck;
     
     //Pointer
     ItemType* m_Set;
     
+    //This one is the max size
     int m_Setsize;
     
 };
